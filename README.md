@@ -27,6 +27,6 @@ IDEA utilizada para a construção do projeto: [IntelliJ IDEA.](https://www.jetb
 
 ## 🔗 Links
 [![portfolio](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/JulianoMachadoS)
-[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/juliano-machado-da-silva-b22897213)
+[![linkedin](https://img.shields.io/badge/linkedin-0A66C2?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/juliano-machado-da-silva)
 [![twitter](https://img.shields.io/badge/X-%23000000.svg?style=for-the-badge&logo=X&logoColor=white)](https://x.com/mach4d0_)
 
