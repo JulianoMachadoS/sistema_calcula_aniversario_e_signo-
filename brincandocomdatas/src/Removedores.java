@@ -55,4 +55,14 @@ public class Removedores {
         }
         return texto;
     }
+    public String removeLetras(String texto){
+        for (int i=0; i < texto.length(); i++){
+            if (vr.ehLetradoAlfabetoAZ(texto.charAt(i))){
+                texto = texto.substring(0,i) + texto.substring(i+1);
+                i--;
+            }
+        }
+        return texto;
+    }
+
 }

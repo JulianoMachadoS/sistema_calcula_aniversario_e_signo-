@@ -3,7 +3,7 @@ public class Contadores {
 
     public int contaCaracteres (String texto){
         int contador = 0;
-        for (int i=0 ; i < texto.length() -1;i++){
+        for (int i=0 ; i < texto.length();i++){
             if (vr.ehEspaco(texto.charAt(i))){
                 contador++;
             }
@@ -12,7 +12,7 @@ public class Contadores {
     }
     public int contaLetras (String texto){
     int contador = 0;
-        for (int i=0 ; i < texto.length() -1;i++){
+        for (int i=0 ; i < texto.length();i++){
             if (vr.ehLetradoAlfabetoAZ(texto.charAt(i))){
             contador++;
             }
@@ -39,7 +39,7 @@ public class Contadores {
     }
     public int contaSimbolos (String texto){
         int contador = 0;
-        for (int i=0 ; i < texto.length() -1;i++){
+        for (int i=0 ; i < texto.length();i++){
             if (vr.ehSimbulo(texto.charAt(i))){
                 contador++;
             }
@@ -48,7 +48,7 @@ public class Contadores {
     }
     public int contaNumeros (String texto){
         int contador = 0;
-        for (int i=0 ; i < texto.length() -1;i++){
+        for (int i=0 ; i < texto.length();i++){
             if (vr.ehNumero(texto.charAt(i))){
                 contador++;
             }
