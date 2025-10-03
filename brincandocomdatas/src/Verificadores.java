@@ -48,6 +48,7 @@ public class Verificadores {
         }
         return false;
     }
+    // arrumar!
     public boolean ehDataValida (int dia, int mes, int ano){
         Date dt = new Date();
         int diaAatual = dt.getDate();

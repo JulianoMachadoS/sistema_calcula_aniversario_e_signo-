@@ -9,7 +9,6 @@ public class App {
         System.out.println("\f");
 
         boolean loop = true;
-        int contador = 1;
         String diaDaSemana;
         String dataTeste = "";
         String nome = "vazio";

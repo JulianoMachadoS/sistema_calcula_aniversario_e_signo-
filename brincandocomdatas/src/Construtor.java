@@ -1,3 +1,4 @@
+import java.sql.SQLOutput;
 import java.text.Normalizer;
 import java.util.Date;
 import java.util.Scanner;
@@ -20,11 +21,20 @@ public class Construtor {
         opcao = r.removeSimbulos(opcao);
         opcao = r.removeLetras(opcao);
         opcao = r.removeEspacosInicioFim(opcao);
-        opcao = ordenaString(opcao);
+        opcao = ordenaString(opcao);// ordena em crescente os numeros. (123456...)
+        // ordena de novo
         while (opcao.length() > 1 ){
             opcao = opcao.substring(0,1);
         }
         return opcao;
+    }
+    public String ordenaNumerosStringPorQuantidade(String numero){
+        char menor;
+        char maior;
+        for (int i =0; i < numero.length(); i++){
+
+        }
+        return numero;
     }
     public String formataDataDeAniversario(){
         Scanner teclado = new Scanner(System.in);
@@ -175,6 +185,8 @@ public class Construtor {
             stringOrdenada.append(menor);
             copia = copia.substring(0, indexMenor) + copia.substring(indexMenor + 1);
         }
+        System.out.println("\n" + stringOrdenada.toString() + "\n");
+        System.out.println("\n------------stringOrdenada.toString()----------------\n");
         return stringOrdenada.toString();
     }
 
