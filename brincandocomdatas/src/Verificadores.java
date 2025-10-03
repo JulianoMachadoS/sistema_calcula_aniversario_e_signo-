@@ -1,4 +1,6 @@
 import java.util.*;
+import java.util.Date;
+
 public class Verificadores {
     public boolean ehLetradoAlfabetoAZ(char letra){
         letra = Character.toLowerCase(letra);
@@ -19,10 +21,10 @@ public class Verificadores {
         return false;
     }
     public boolean ehConsoante(char letra){
-        if (ehLetradoAlfabetoAZ(letra) && ehVogal(letra)) {
-            return false;
+        if (ehLetradoAlfabetoAZ(letra) && !ehVogal(letra)) {
+            return true;
         }
-        return true;
+        return false;
     }
     public boolean ehNumero(char letra){
         letra = Character.toLowerCase(letra);
@@ -46,10 +48,39 @@ public class Verificadores {
         }
         return false;
     }
-    public boolean ehVirgula(char letra){
-        if(letra == ','){
-            return true;
+    public boolean ehDataValida (int dia, int mes, int ano){
+        Date dt = new Date();
+        int diaAatual = dt.getDate();
+        int mesAtual = dt.getMonth() +1;
+        int anoAtual = dt.getYear() + 1900;
+
+        /*
+        Pode ser feito tambem com:
+        Date aniversarioDate = new Date(ano -1900, mes-1, dia);
+
+        if(aniversarioDate.after(dt)) {
+            return false;
+        } */
+
+        if(dia >= 32){
+            return false;
         }
-        return false;
+        if (mes >= 13){
+            return false;
+        }
+        if (ano > anoAtual) {
+            return false;
+        }
+        if ( ano == anoAtual){
+            if (mes == mesAtual){
+                if (dia >= diaAatual){
+                    return false;
+                }
+            } else if (mes < mesAtual) {
+                return  true;
+            }
+
+        }
+        return true;
     }
 }

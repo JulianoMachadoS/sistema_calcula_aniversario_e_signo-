@@ -2,40 +2,67 @@ import java.text.Normalizer;
 import java.util.Date;
 import java.util.Scanner;
 public class Construtor {
-    public String formataNome(String texto){
+    public int contaletras(String nome){
+        Contadores c = new Contadores();
+        return c.contaLetras(nome);
+    }
+    public int contavogais(String nome){
+        Contadores c = new Contadores();
+        return c.contaVogais(nome);
+    }
+    public int contaconsoantes (String nome){
+        Contadores c = new Contadores();
+        return c.contaConsoantes(nome);
+    }
+    public String formataOpcaoMenu (String opcao){
         Removedores r = new Removedores();
-        texto = r.removeEspacosInicioFim(texto);
-        texto = r.removeEspacos(texto);
-        texto = r.removeNumeros(texto);
-        texto = r.removeSimbulos(texto);
-        return texto;
+        opcao = r.removeEspacos(opcao);
+        opcao = r.removeSimbulos(opcao);
+        opcao = r.removeLetras(opcao);
+        opcao = r.removeEspacosInicioFim(opcao);
+        opcao = ordenaString(opcao);
+        while (opcao.length() > 1 ){
+            opcao = opcao.substring(0,1);
+        }
+        return opcao;
     }
     public String formataDataDeAniversario(){
         Scanner teclado = new Scanner(System.in);
+        Verificadores v = new Verificadores();
         Removedores r = new Removedores();
-        Contadores cn = new Contadores();
-        String dataDenascimento = "";
-        int contador = 0;
-        int contador2 = 0;
-        while (contador != 8 ){
-            if (contador2 == 0){
+        Contadores c = new Contadores();
+        String dataDeNascimento = " ";
+        int dia;
+        int mes;
+        int ano;
+        int contadorWhile = 0;
+        int contadorIF = 0;
+        while (contadorWhile != 8 ){
+            if (contadorIF == 0){
                 System.out.print("Que dia você nasceu?\nDe a data neste formato [ dia/mes/ano ] " +
                         "com zeros inclusos ");
-                contador2++;
+                contadorIF++;
             }else{
-                System.out.println("Sua data precisa estar neste formato [ dia/mes/ano ] com zeros inclusos. \nEx: 02/03/2002 \n");
+                System.out.println("\nSua data precisa estar neste formato [ dia/mes/ano ] com zeros inclusos. " +
+                        "\nEx: 02/03/2002 , (dois de março de dois mil e dois) \n");
                 System.out.print("Digite novamente sua data de nascimento: ");
             }
-            dataDenascimento = teclado.nextLine();
-            dataDenascimento = r.removeEspacos(dataDenascimento);
-            dataDenascimento = r.removeSimbulos(dataDenascimento);
-            dataDenascimento = r.removeLetras(dataDenascimento);
-            contador = cn.contaNumeros(dataDenascimento);
+            dataDeNascimento = teclado.nextLine();
+            dataDeNascimento = r.removeEspacos(dataDeNascimento);
+            dataDeNascimento = r.removeSimbulos(dataDeNascimento);
+            dataDeNascimento = r.removeLetras(dataDeNascimento);
+            // validador de data existente!
+            contadorWhile = c.contaNumeros(dataDeNascimento);
+            if (contadorWhile == 8 ){
+                dia = diaAniversario(dataDeNascimento);
+                mes = mesAniversario(dataDeNascimento);
+                ano = anoAniversario(dataDeNascimento);
+                if (!v.ehDataValida(dia , mes , ano)){
+                    contadorWhile = 0;
+                }
+            }
         }
-        System.out.println("Sua data de nascimento é " + dataDenascimento.substring(0,2)+
-                "/"+dataDenascimento.substring(2,4)+ "/" +dataDenascimento.substring(4,dataDenascimento.length()));
-        // colocar sop com data no formato -> xx/zz/wwww
-        return dataDenascimento;
+        return dataDeNascimento;
     }
     public int diaAniversario (String dataDenascimento){
         int dia = Integer.parseInt(dataDenascimento.substring(0,2));
@@ -44,10 +71,9 @@ public class Construtor {
     public int mesAniversario (String dataDenascimento){
         int mes = Integer.parseInt(dataDenascimento.substring(2,4));
         return mes;
-
     }
     public int anoAniversario (String dataDenascimento){
-        int ano = Integer.parseInt(dataDenascimento.substring(4,dataDenascimento.length()));
+        int ano = Integer.parseInt(dataDenascimento.substring(4));
         return ano;
     }
     public String diaDaSemanaDenascimento(int dia, int mes, int ano){
@@ -115,6 +141,7 @@ public class Construtor {
         }
         return "Capricórnio";
     }
+
     public boolean comparaAnagrama(String primeiroNome, String segundoNome) {
         Removedores r = new Removedores();
         String normalizadoP = r.removeEspacos(Normalizer.normalize(primeiroNome, Normalizer.Form.NFD));
@@ -129,7 +156,7 @@ public class Construtor {
 
         return stringOrdenadaP.equals(stringOrdenadaS);
     }
-
+        // ordena a String, os caracteres de maior quantidade ficam na parte mais significativa. (a esquerda)
     public String ordenaString (String valor) {
         StringBuilder stringOrdenada = new StringBuilder();
         String copia = valor;
@@ -166,18 +193,34 @@ public class Construtor {
 
     }
     public String nomeUsuario(){
+        Contadores c = new Contadores();
         Removedores r = new Removedores();
         Scanner teclado  = new Scanner (System.in);
+        String nome = " ";
+        int contador = 0;
+            do {
+                if (contador == 0){
+                    System.out.print("Digite seu nome ");
+                }else if (contador < 2){
+                    System.out.print("\nDigite um nome valido ");
+                }else {
+                    System.out.print("\nDeve conter no mínimo 3 caracteres" +
+                            "\nEx: Ana\nDigite um nome valido ");
+                }
+                nome = teclado.nextLine();
+                nome = nome.toLowerCase();
+                // valida se tem mais de 3 caracteres, evita "exeption" nas remoções de char's na string
+                if(c.contaLetras(nome)>= 3){
+                    nome = r.removeSimbulos(nome);
+                    nome = r.removeEspacosDuplos(nome);
+                    nome = r.removeNumeros(nome);
+                    nome = r.removeEspacosInicioFim(nome);
+                    nome = primeiraLetraMaiuscula(nome);
+                    nome = maiusculaDepoisDoespaco(nome);
+                }
+                contador ++;
+            }while (!(c.contaLetras(nome)>= 3));
 
-        System.out.print("Digite seu nome ");
-        String nome = teclado.nextLine();
-        nome = nome.toLowerCase();
-        nome = r.removeSimbulos(nome);
-        nome = r.removeEspacosDuplos(nome);
-        nome = r.removeNumeros(nome);
-        nome = r.removeEspacosInicioFim(nome);
-        nome = primeiraLetraMaiuscula(nome);
-        nome = maiusculaDepoisDoespaco(nome);
         return nome;
     }
     public String primeiraLetraMaiuscula(String texto){
