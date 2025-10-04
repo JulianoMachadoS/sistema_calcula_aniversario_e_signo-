@@ -1,3 +1,8 @@
+/*
+  Nome: Juliano Machado da Silva
+  Numero de Matriculo: 25108646-8
+*/
+
 public class Removedores {
     Verificadores vr = new Verificadores();
     public String removeEspacosDuplos(String texto){
@@ -64,5 +69,4 @@ public class Removedores {
         }
         return texto;
     }
-
 }

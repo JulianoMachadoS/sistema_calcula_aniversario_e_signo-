@@ -1,8 +1,79 @@
-import java.sql.SQLOutput;
+/*
+  Nome: Juliano Machado da Silva
+  Numero de Matriculo: 25108646-8
+*/
+
 import java.text.Normalizer;
 import java.util.Date;
 import java.util.Scanner;
 public class Construtor {
+    public String formataOpcaoMenu (String opcao){
+        Removedores r = new Removedores();
+        if(opcao.length() > 0){
+            opcao = r.removeEspacos(opcao);
+            opcao = r.removeSimbulos(opcao);
+            opcao = r.removeLetras(opcao);
+            opcao = r.removeEspacosInicioFim(opcao);
+            opcao = numeroDeMaiorEvidencia(opcao);
+        }
+        return opcao;
+    }
+    public String numeroDeMaiorEvidencia(String numero){
+
+        int contagem = 0;
+        String numeroMaisEvidente = " ";
+
+        for (int i = 0; i < numero.length(); i++){
+            int novaContagem = 0;
+            String numeroTeste = " ";
+
+            for (int j = 0; j < numero.length(); j++){
+
+                if ( numero.charAt(i) == numero.charAt(j) ){
+                    novaContagem++;
+                    numeroTeste = numero.substring(i,i+1);
+                }
+
+            }
+            if( contagem < novaContagem ){
+                contagem = novaContagem;
+                numeroMaisEvidente = numeroTeste.substring(0);
+            }
+        }
+        return numeroMaisEvidente;
+    }
+
+    public String formataNomeUsuario(){
+        Contadores c = new Contadores();
+        Removedores r = new Removedores();
+        Scanner teclado  = new Scanner (System.in);
+        String nome = " ";
+        int contador = 0;
+        do {
+            if (contador == 0){
+                System.out.print("Digite seu nome ");
+            }else if (contador < 2){
+                System.out.print("\nDigite um nome valido ");
+            }else {
+                System.out.print("\nDeve conter no mínimo 3 caracteres" +
+                        "\nEx: Ana\nDigite um nome valido ");
+            }
+            nome = teclado.nextLine();
+            nome = nome.toLowerCase();
+            // valida se tem mais de 3 caracteres, evita "exeption" nas remoções de char's da string
+            if(c.contaLetras(nome)>= 3){
+                nome = r.removeSimbulos(nome);
+                nome = r.removeEspacosDuplos(nome);
+                nome = r.removeNumeros(nome);
+                nome = r.removeEspacosInicioFim(nome);
+                nome = primeiraLetraMaiuscula(nome);
+                nome = maiusculaDepoisDoespaco(nome);
+            }
+            contador ++;
+        }while (!(c.contaLetras(nome)>= 3));
+
+        return nome;
+    }
     public int contaletras(String nome){
         Contadores c = new Contadores();
         return c.contaLetras(nome);
@@ -15,27 +86,52 @@ public class Construtor {
         Contadores c = new Contadores();
         return c.contaConsoantes(nome);
     }
-    public String formataOpcaoMenu (String opcao){
-        Removedores r = new Removedores();
-        opcao = r.removeEspacos(opcao);
-        opcao = r.removeSimbulos(opcao);
-        opcao = r.removeLetras(opcao);
-        opcao = r.removeEspacosInicioFim(opcao);
-        opcao = ordenaString(opcao);// ordena em crescente os numeros. (123456...)
-        // ordena de novo
-        while (opcao.length() > 1 ){
-            opcao = opcao.substring(0,1);
-        }
-        return opcao;
-    }
-    public String ordenaNumerosStringPorQuantidade(String numero){
-        char menor;
-        char maior;
-        for (int i =0; i < numero.length(); i++){
+    public String pegaPrimeiroNome (String nome){
+        for (int i = 0; i < nome.length(); i++){
 
+            if ( nome.charAt(i) == ' ') {// Pega so o primeiro nome.
+               return nome.substring(0, i);
+            }
         }
-        return numero;
+        return nome;
     }
+    public String primeiraLetraMaiuscula(String texto){
+        texto = texto.substring(0,1).toUpperCase() + texto.substring(1);
+        return texto;
+    }
+    public String maiusculaDepoisDoespaco (String texto){
+        Verificadores v = new Verificadores();
+        for (int i = 0; i < texto.length() - 1; i++){
+            if (texto.charAt(i) == ' ' && v.ehLetradoAlfabetoAZ(texto.charAt(i+1)) ){
+                //se for " "  E letra do alfabeto a sucessão (i+1) entra no if
+                texto = texto.substring(0,i+1) + Character.toUpperCase(texto.charAt(i+1)) + texto.substring(i+2, texto.length());
+            }
+        }
+        return texto;
+    }
+    public String geraAnagramaDoTipoPalinromoComPrimeiroNome(String primeiroNome){
+        Removedores r = new Removedores();
+        Verificadores v = new Verificadores();
+        String possivelPalindomo = " ";
+        for (int i = primeiroNome.length() - 1; i >= 0 ; i--) {
+            if (v.ehLetradoAlfabetoAZ(primeiroNome.charAt(i))) {// inverte a ordem da palavra.
+                possivelPalindomo = possivelPalindomo + primeiroNome.charAt(i);
+            }
+        }
+        possivelPalindomo = r.removeEspacos(possivelPalindomo);
+        return possivelPalindomo;
+    }
+    public boolean ehPalindormo(String primeiroNome, String nomeInvertido){
+        Verificadores v = new Verificadores();
+        primeiroNome = primeiroNome.toLowerCase();
+        nomeInvertido = nomeInvertido.toLowerCase();
+
+        String normalizadoP = (Normalizer.normalize(primeiroNome, Normalizer.Form.NFD));
+        String normalizadoS = (Normalizer.normalize(nomeInvertido, Normalizer.Form.NFD));
+
+        return v.ehPalindromo(normalizadoS, normalizadoP);
+    }
+
     public String formataDataDeAniversario(){
         Scanner teclado = new Scanner(System.in);
         Verificadores v = new Verificadores();
@@ -75,18 +171,42 @@ public class Construtor {
         return dataDeNascimento;
     }
     public int diaAniversario (String dataDenascimento){
-        int dia = Integer.parseInt(dataDenascimento.substring(0,2));
-        return dia;
+        return Integer.parseInt(dataDenascimento.substring(0,2));
     }
     public int mesAniversario (String dataDenascimento){
-        int mes = Integer.parseInt(dataDenascimento.substring(2,4));
-        return mes;
+        return Integer.parseInt(dataDenascimento.substring(2,4));
     }
     public int anoAniversario (String dataDenascimento){
-        int ano = Integer.parseInt(dataDenascimento.substring(4));
-        return ano;
+        return Integer.parseInt(dataDenascimento.substring(4));
     }
-    public String diaDaSemanaDenascimento(int dia, int mes, int ano){
+    public int diasFaltantesAniversario(int dia, int mes) {
+        Date atual = new Date();
+
+        Date aniversarioDate = new Date(atual.getYear(), mes-1, dia+1);
+
+        if (aniversarioDate.before(atual)) {
+            aniversarioDate = new Date(atual.getYear() + 1, mes-1, dia+1);
+        }
+
+        long tempo = (aniversarioDate.getTime() - atual.getTime()) / 86400000;
+
+        return (int) tempo;
+
+    }
+    public int descobreIdadeUsuario(int dia, int mes, int ano){
+        Date dt = new Date();
+        int diaAtual = dt.getDate();
+        int mesAtual = dt.getMonth()+1;
+        int anoAtual = dt.getYear()+1900;
+        int idade = anoAtual - ano;
+
+        if ((mes > mesAtual) || (mes == mesAtual && dia > diaAtual) ){
+            idade = idade -1;
+        }
+        return idade;
+    }
+
+    public String diaDaSemanaDeNascimento(int dia, int mes, int ano){
         Scanner teclado = new Scanner(System.in);
         if (mes <= 2) {
             mes += 12;
@@ -150,103 +270,5 @@ public class Construtor {
             //Capricórnio: 22 de dezembro a 20 de janeiro
         }
         return "Capricórnio";
-    }
-
-    public boolean comparaAnagrama(String primeiroNome, String segundoNome) {
-        Removedores r = new Removedores();
-        String normalizadoP = r.removeEspacos(Normalizer.normalize(primeiroNome, Normalizer.Form.NFD));
-        String normalizadoS = r.removeEspacos(Normalizer.normalize(segundoNome, Normalizer.Form.NFD));
-
-        if(normalizadoP.length() != normalizadoS.length()) {
-            return false;
-        }
-
-        String stringOrdenadaP = ordenaString(normalizadoP.toLowerCase());
-        String stringOrdenadaS = ordenaString(normalizadoS.toLowerCase());
-
-        return stringOrdenadaP.equals(stringOrdenadaS);
-    }
-        // ordena a String, os caracteres de maior quantidade ficam na parte mais significativa. (a esquerda)
-    public String ordenaString (String valor) {
-        StringBuilder stringOrdenada = new StringBuilder();
-        String copia = valor;
-        while (!copia.isEmpty()) {
-            String menor = copia.substring(0, 1);
-            int indexMenor = 0;
-
-            for (int i = 1; i < copia.length(); i++) {
-                String teste = copia.substring(i, i+1);
-                if(menor.compareTo(teste) > 0) {
-                    menor = teste;
-                    indexMenor = i;
-                }
-            }
-
-            stringOrdenada.append(menor);
-            copia = copia.substring(0, indexMenor) + copia.substring(indexMenor + 1);
-        }
-        System.out.println("\n" + stringOrdenada.toString() + "\n");
-        System.out.println("\n------------stringOrdenada.toString()----------------\n");
-        return stringOrdenada.toString();
-    }
-
-    public int diasFaltantesAniversario(int dia, int mes) {
-        Date atual = new Date();
-
-        Date aniversarioDate = new Date(atual.getYear(), mes-1, dia+1);
-
-        if (aniversarioDate.before(atual)) {
-            aniversarioDate = new Date(atual.getYear() + 1, mes-1, dia+1);
-        }
-
-        long tempo = (aniversarioDate.getTime() - atual.getTime()) / 86400000;
-
-        return (int) tempo;
-
-    }
-    public String nomeUsuario(){
-        Contadores c = new Contadores();
-        Removedores r = new Removedores();
-        Scanner teclado  = new Scanner (System.in);
-        String nome = " ";
-        int contador = 0;
-            do {
-                if (contador == 0){
-                    System.out.print("Digite seu nome ");
-                }else if (contador < 2){
-                    System.out.print("\nDigite um nome valido ");
-                }else {
-                    System.out.print("\nDeve conter no mínimo 3 caracteres" +
-                            "\nEx: Ana\nDigite um nome valido ");
-                }
-                nome = teclado.nextLine();
-                nome = nome.toLowerCase();
-                // valida se tem mais de 3 caracteres, evita "exeption" nas remoções de char's na string
-                if(c.contaLetras(nome)>= 3){
-                    nome = r.removeSimbulos(nome);
-                    nome = r.removeEspacosDuplos(nome);
-                    nome = r.removeNumeros(nome);
-                    nome = r.removeEspacosInicioFim(nome);
-                    nome = primeiraLetraMaiuscula(nome);
-                    nome = maiusculaDepoisDoespaco(nome);
-                }
-                contador ++;
-            }while (!(c.contaLetras(nome)>= 3));
-
-        return nome;
-    }
-    public String primeiraLetraMaiuscula(String texto){
-        texto = texto.substring(0,1).toUpperCase() + texto.substring(1);
-        return texto;
-    }
-    public String maiusculaDepoisDoespaco (String texto){
-        Verificadores vr = new Verificadores();
-        for (int i = 0; i < texto.length() - 1; i++){
-            if (texto.charAt(i) == ' ' && vr.ehLetradoAlfabetoAZ(texto.charAt(i+1)) ){
-                //se for " "  E letra do alfabeto a sucessão (i+1) entra no if
-                texto = texto.substring(0,i+1) + Character.toUpperCase(texto.charAt(i+1)) + texto.substring(i+2, texto.length());
-            }
-        }
-        return texto;
     }
 }

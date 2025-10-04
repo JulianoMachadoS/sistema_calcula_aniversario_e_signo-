@@ -1,7 +1,13 @@
+/*
+  Nome: Juliano Machado da Silva
+  Numero de Matriculo: 25108646-8
+*/
+
 import java.util.*;
 import java.util.Date;
 
 public class Verificadores {
+
     public boolean ehLetradoAlfabetoAZ(char letra){
         letra = Character.toLowerCase(letra);
         if (letra == 'a' || letra == 'b' || letra == 'c' || letra == 'd' || letra == 'e' || letra == 'f' ||
@@ -26,6 +32,9 @@ public class Verificadores {
         }
         return false;
     }
+    public boolean ehPalindromo(String nome, String nomeInvertido) {
+        return nomeInvertido.equals(nome);
+    }
     public boolean ehNumero(char letra){
         letra = Character.toLowerCase(letra);
         if (letra == '1' || letra == '2' || letra == '3' || letra == '4' || letra == '5' ||
@@ -41,28 +50,15 @@ public class Verificadores {
         }
         return true;
     }
-    public boolean ehEspaco(char letra){
-        letra = Character.toLowerCase(letra);
-        if (letra == ' '){
-            return true;
-        }
-        return false;
-    }
-    // arrumar!
     public boolean ehDataValida (int dia, int mes, int ano){
         Date dt = new Date();
         int diaAatual = dt.getDate();
         int mesAtual = dt.getMonth() +1;
         int anoAtual = dt.getYear() + 1900;
 
-        /*
-        Pode ser feito tambem com:
-        Date aniversarioDate = new Date(ano -1900, mes-1, dia);
-
-        if(aniversarioDate.after(dt)) {
+        if (ano < 1900){
             return false;
-        } */
-
+        }
         if(dia >= 32){
             return false;
         }
@@ -72,16 +68,34 @@ public class Verificadores {
         if (ano > anoAtual) {
             return false;
         }
+
+        if(  !(mes == 1 || mes == 3 || mes == 5 || mes == 7 ||
+                mes== 8 || mes == 10 || mes == 12) && dia == 31){
+                return false;
+        }
+
+        if (mes == 2 ){
+            if ( !ehAnoBissexto(ano) && dia == 29 ){
+                return false;
+            }
+        }
+
         if ( ano == anoAtual){
             if (mes == mesAtual){
                 if (dia >= diaAatual){
                     return false;
                 }
-            } else if (mes < mesAtual) {
-                return  true;
+            } else if (mes > mesAtual) {
+                return  false;
             }
 
         }
         return true;
+    }
+    public boolean ehAnoBissexto (int ano){
+        if (ano % 400 == 0){
+            return true;
+        }
+        return false;
     }
 }
